@@ -1,0 +1,24 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Cloner le repo Bitnami
+- checkout: none
+- script: |
+    git clone https://github.com/bitnami/containers.git
+    cd containers/postgresql/14
+    docker build -t my-postgresql:14 .
+  displayName: 'Clone Bitnami and build PostgreSQL Docker image'
+
+# Optionnel : push vers un registry
+- script: |
+    docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+    docker tag my-postgresql:14 $(DOCKER_REGISTRY)/my-postgresql:14
+    docker push $(DOCKER_REGISTRY)/my-postgresql:14
+  displayName: 'Push Docker image to registry'
+  condition: always()
