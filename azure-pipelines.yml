@@ -10,6 +10,7 @@ steps:
 # Cloner le repo Bitnami
 - checkout: none
 - script: |
+    ls
     cd containers/bitnami/postgresql/14
     docker build -t my-postgresql:14 .
   displayName: 'Clone Bitnami and build PostgreSQL Docker image'
